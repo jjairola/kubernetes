@@ -11,3 +11,4 @@ Link: https://courses.mooc.fi/org/uh-cs/courses/devops-with-kubernetes]
 - [1.3.](https://github.com/jjairola/kubernetes/tree/1.3/log_output)
 - [1.4.](https://github.com/jjairola/kubernetes/tree/1.4/project/webserver)
 - [1.5.](https://github.com/jjairola/kubernetes/tree/1.5/project/webserver)
+- [1.6.](https://github.com/jjairola/kubernetes/tree/1.6/project)
