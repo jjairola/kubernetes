@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-server-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-server
+  template:
+    metadata:
+      labels:
+        app: log-server
+    spec:
+      containers:
+        - name: log-server
+          image: jjairola/log_server:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: LOG_FILE
+              value: "/log_files/logfile"
+          volumeMounts:
+            - name: log-storage
+              mountPath: /log_files
+        - name: log-writer
+          image: jjairola/log_writer:latest
+          env:
+            - name: LOG_FILE
+              value: "/log_files/logfile"
+          volumeMounts:
+            - name: log-storage
+              mountPath: /log_files
+      volumes:
+        - name: log-storage
+          emptyDir: {}
