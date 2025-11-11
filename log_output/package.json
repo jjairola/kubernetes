@@ -9,5 +9,8 @@
   "scripts": {
     "start": "node index.js",
     "build": "docker build -t jjairola/log_output:latest . && docker push jjairola/log_output:latest"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
   }
 }

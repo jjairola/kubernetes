@@ -1,6 +1,26 @@
 
 ## Log output app
 
+### Ex 1.7
+
+Update app to respond to GET / with same log message.
+
+```bash
+
+npm run build
+kubectl apply -k manifests
+
+Try:
+http://localhost:8081/
+
+
+kubectl delete -k manifests
+```
+
+
+
+
+### Previous exercies ###
 
 Deploy with:
 ```bash
