@@ -1,4 +1,16 @@
 
+## Ex 1.8
+
+```bash
+
+kubectl apply -k manifests
+
+Test: http://localhost:8081/
+
+kubectl delete -k manifests
+
+```
+
 ## Ex 1.6
 
 ### Notes
