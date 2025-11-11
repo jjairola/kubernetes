@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: webserver-svc
+  name: pingpong-svc
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
-    app: webserver
+    app: pingpong
   ports:
-    - port: 2345
+    - port: 2346
       protocol: TCP
       targetPort: 3000

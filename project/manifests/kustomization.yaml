@@ -1,4 +1,7 @@
 resources:
-- deployment.yaml
-- service.yaml
+- deployment-log-output.yaml
+- deployment-pingpong.yaml
+- service-log-output.yaml
+- service-pingpong.yaml
 - ingress.yaml
+- middleware.yaml

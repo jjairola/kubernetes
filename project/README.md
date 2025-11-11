@@ -1,4 +1,22 @@
 
+
+## Ex 1.9 added
+
+
+```bash
+
+kubectl apply -k manifests
+
+Test:
+http://localhost:8081/
+http://localhost:8081/pingpong
+
+kubectl delete -k manifests
+
+```
+
+
+
 ## Ex 1.8
 
 ```bash
