@@ -1,6 +1,8 @@
 const crypto = require("crypto");
+const e = require("express");
 const express = require("express");
 const app = express();
+const fs = require("fs");
 
 const port = process.env.PORT || 3000;
 const pingpong_url = process.env.PINGPONG_URL || "";
@@ -8,8 +10,23 @@ const pingpong_url = process.env.PINGPONG_URL || "";
 const instance_id = crypto.randomUUID();
 
 app.get("/", async (req, res) => {
-  let responseText = log();
+  let responseText = "<pre>";
 
+  //file content: this text is from file
+  try {
+    const fileContent = fs.readFileSync("/app/config/config.txt", "utf-8").trim();
+    responseText += `\nfile content: ${fileContent}`;
+  } catch (error) {
+    responseText += `\nfile content: Error reading file`;
+  }
+  //env variable: MESSAGE=hello world
+  const message = process.env.MESSAGE || "No MESSAGE env variable set";
+  responseText += `\nenv variable: MESSAGE=${message}`;
+
+  // log + instance
+  responseText += log();
+
+  //pingpong fetch
   if (pingpong_url) {
     try {
       const response = await fetch(pingpong_url);
@@ -23,6 +40,7 @@ app.get("/", async (req, res) => {
     }
   }
 
+  responseText += "\n</pre>";
   res.send(responseText);
 });
 

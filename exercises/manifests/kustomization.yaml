@@ -1,6 +1,7 @@
 namespace: exercises
 
 resources:
+- configmap-log-output.yaml
 - deployment-log-output.yaml
 - deployment-pingpong.yaml
 - service-log-output.yaml

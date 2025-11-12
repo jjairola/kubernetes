@@ -1,4 +1,8 @@
 
+## Ex 2.5 added
+
+- configmap
+
 ## Ex 2.3
 
 - Added namepsace excersices

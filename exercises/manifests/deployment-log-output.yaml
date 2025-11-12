@@ -18,5 +18,18 @@ spec:
           env:
             - name: PINGPONG_URL
               value: "http://pingpong-svc:2346"
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: log-output-config
+                  key: MESSAGE
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config
           ports:
             - containerPort: 3000
+      volumes:
+      # You set volumes at the Pod level, then mount them into containers inside that Pod
+        - name: config-volume
+          configMap:
+            name: log-output-config
