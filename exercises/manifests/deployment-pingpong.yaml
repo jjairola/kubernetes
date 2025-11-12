@@ -17,3 +17,14 @@ spec:
           image: jjairola/pingpong:latest
           ports:
             - containerPort: 3000
+          env:
+            - name: DB_HOST
+              value: "postgres-svc"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "pingpong"
+            - name: DB_USER
+              value: "pingpong"
+            - name: DB_PASSWORD
+              value: "password"

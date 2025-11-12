@@ -1,4 +1,10 @@
 
+
+## Ex 2.7 added
+
+- StatefulSet with one replicate for PostgreSQL
+
+
 ## Ex 2.5 added
 
 - configmap

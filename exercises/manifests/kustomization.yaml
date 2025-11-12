@@ -8,3 +8,5 @@ resources:
 - service-pingpong.yaml
 - ingress.yaml
 - middleware.yaml
+- statefulset-postgres.yaml
+- service-postgres.yaml
