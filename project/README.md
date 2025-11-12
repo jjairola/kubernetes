@@ -1,3 +1,12 @@
+
+## Ex 2.4 added
+
+- Added namepsace project
+
+```bash
+kubectl create namespace project
+```
+
 ## Ex 2.2. added
 
 - new todo-backend. stores in memory todos

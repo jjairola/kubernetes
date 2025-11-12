@@ -1,4 +1,4 @@
-namespace: exercises
+namespace: project
 
 resources:
 - deployment-todo-backend.yaml
