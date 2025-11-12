@@ -20,6 +20,8 @@ spec:
           env:
             - name: LOG_FILE
               value: "/log_files/logfile"
+            - name: PINGPONG_FILE
+              value: "/log_files/pingpong"
           volumeMounts:
             - name: log-storage
               mountPath: /log_files
@@ -31,6 +33,19 @@ spec:
           volumeMounts:
             - name: log-storage
               mountPath: /log_files
+        - name: pingpong
+          image: jjairola/pingpong:latest
+          env:
+            - name: PINGPONG_FILE
+              value: "/log_files/pingpong"
+            - name: PORT
+              value: "3001"
+          ports:
+            - containerPort: 3001
+          volumeMounts:
+            - name: log-storage
+              mountPath: /log_files
       volumes:
         - name: log-storage
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: log-storage-pvc
