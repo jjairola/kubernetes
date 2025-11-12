@@ -1,9 +1,7 @@
 resources:
-- deployment-log-output.yaml
-- deployment-pingpong.yaml
+- deployment-todo-backend.yaml
 - deployment-webserver.yaml
-- service-log-output.yaml
-- service-pingpong.yaml
+- service-todo-backend.yaml
 - service-webserver.yaml
 - ingress.yaml
 - middleware.yaml

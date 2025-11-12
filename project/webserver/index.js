@@ -2,40 +2,54 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
 const path = require('path');
-const https = require('https');
 
+// Settings
 const port = process.env.PORT || 3000;
+const todoBackendUrl = process.env.TODO_BACKEND_URL || 'http://localhost:3001';
 const cacheDir = path.join(__dirname, '.cache');
 const imageFile = path.join(cacheDir, 'current.jpg');
 const metadataFile = path.join(cacheDir, 'metadata.json');
 
+// Initialize
 if (!fs.existsSync(cacheDir)) {
   fs.mkdirSync(cacheDir, {recursive: true});
 }
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Helper functions
+async function fetchTodos() {
+  const response = await fetch(`${todoBackendUrl}/todos`);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return await response.json();
+}
+
+async function createTodo(text) {
+  const response = await fetch(`${todoBackendUrl}/todos`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ text })
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return await response.json();
+}
 
 async function fetchImage() {
-  return new Promise((resolve, reject) => {
-    const fetchImageFromUrl = (url) => {
-      https.get(url, (res) => {
-        if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-          fetchImageFromUrl(res.headers.location);
-          return;
-        }
-        const data = [];
-        res.on('data', chunk => data.push(chunk));
-        res.on('end', () => {
-          const buffer = Buffer.concat(data);
-          fs.writeFileSync(imageFile, buffer);
-          const metadata = { timestamp: Date.now() };
-          fs.writeFileSync(metadataFile, JSON.stringify(metadata));
-          resolve();
-        });
-      }).on('error', reject);
-    };
-    fetchImageFromUrl('https://picsum.photos/1200');
-  });
+  const response = await fetch('https://picsum.photos/1200');
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const buffer = await response.arrayBuffer();
+  fs.writeFileSync(imageFile, Buffer.from(buffer));
+  const metadata = { timestamp: Date.now() };
+  fs.writeFileSync(metadataFile, JSON.stringify(metadata));
 }
 
 function getCurrentImage() {
@@ -52,44 +66,50 @@ function getCurrentImage() {
   return null;
 }
 
-app.get('/', (req, res) => {
-  const todos = [
-    'Learn DevOps with Kubernetes',
-    'Build a todo app',
-    'Deploy to production'
-  ];
+// Routes
 
-  const todoList = todos.map(todo => `<li>${todo}</li>`).join('');
+app.get('/', async (req, res) => {
+  try {
+    const todos = await fetchTodos();
+    const todoList = todos.map(todo => `<li>${todo.text}</li>`).join('');
 
-  res.send(`
-    <html>
-      <body>
-        <h1>The project App</h1>
-        <img src="/image" alt="Random Image">
+    res.send(`
+      <html>
+        <body>
+          <h1>The project App</h1>
+          <img src="/image" alt="Random Image">
 
-        <div>
-          <input type="text" id="todoInput" maxlength="140">
-          <button onclick="addTodo()">Create Todo</button>
-        </div>
+          <form action="/todos" method="POST">
+            <div>
+              <input type="text" name="text" maxlength="140">
+              <button type="submit">Create Todo</button>
+            </div>
+          </form>
 
-        <ul>
-          ${todoList}
-        </ul>
+          <ul>
+            ${todoList}
+          </ul>
 
-        <script>
-          function addTodo() {
-            const input = document.getElementById('todoInput');
-            if (input.value.trim() !== '') {
-              alert('Todo added: ' + input.value);
-              input.value = '';
-            }
-          }
-        </script>
+          <p>DevOps with Kubernetes 2025</p>
+        </body>
+      </html>
+    `);
+  } catch (error) {
+    res.status(500).send('Error fetching todos');
+  }
+});
 
-        <p>DevOps with Kubernetes 2025</p>
-      </body>
-    </html>
-  `);
+app.post('/todos', async (req, res) => {
+  const { text } = req.body;
+  if (!text) {
+    return res.status(400).json({ error: 'Text is required' });
+  }
+  try {
+    await createTodo(text);
+    res.redirect('/');
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create todo' });
+  }
 });
 
 app.get('/image', async (req, res) => {

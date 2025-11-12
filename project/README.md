@@ -1,3 +1,6 @@
+## Ex 2.2. added
+
+- new todo-backend. stores in memory todos
 
 ## Ex 1.12 added
 

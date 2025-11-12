@@ -19,6 +19,9 @@ spec:
       containers:
         - name: webserver
           image: jjairola/webserver:latest
+          env:
+            - name: TODO_BACKEND_URL
+              value: http://todo-backend-svc:2348
           volumeMounts:
             - mountPath: /app/.cache
               name: cache-volume

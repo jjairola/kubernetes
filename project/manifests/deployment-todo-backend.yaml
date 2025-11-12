@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pingpong-dep
+  name: todo-backend-dep
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pingpong
+      app: todo-backend
   template:
     metadata:
       labels:
-        app: pingpong
+        app: todo-backend
     spec:
       containers:
-        - name: pingpong
-          image: jjairola/pingpong:latest
+        - name: todo-backend
+          image: jjairola/todo-backend:latest

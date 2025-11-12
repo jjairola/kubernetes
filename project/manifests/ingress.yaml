@@ -15,17 +15,3 @@ spec:
             name: webserver-svc
             port:
               number: 2347
-      - path: /log-output
-        pathType: Prefix
-        backend:
-          service:
-            name: log-output-svc
-            port:
-              number: 2345
-      - path: /pingpong
-        pathType: Prefix
-        backend:
-          service:
-            name: pingpong-svc
-            port:
-              number: 2346
