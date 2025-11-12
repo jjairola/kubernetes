@@ -1,5 +1,5 @@
 {
-  "name": "log_server",
+  "name": "log_output",
   "version": "1.0.0",
   "description": "Deploy with `kubectl apply -a manifests`",
   "license": "ISC",
@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "build": "docker build -t jjairola/log_server:latest . && docker push jjairola/log_server:latest"
+    "build": "docker build -t jjairola/log_output:latest . && docker push jjairola/log_output:latest"
   },
   "dependencies": {
     "express": "^4.18.0"

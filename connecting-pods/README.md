@@ -1,4 +1,9 @@
 
+
+## Ex 2.1
+
+* log_output uses http get to get pingpongs
+
 ## Ex 1.11
 
 * Added pingpong
