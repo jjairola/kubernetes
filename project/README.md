@@ -1,5 +1,5 @@
 
-## Ex 1.11 added
+## Ex 1.12 added
 
 - webserver caches an random image for 10min
 - added pvc
