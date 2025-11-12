@@ -1,9 +1,32 @@
 const express = require('express');
 const crypto = require('crypto');
+const { Client } = require('pg');
 const app = express();
 
 const port = process.env.PORT || 3001;
-const todos = [];
+const client = new Client({
+  host: process.env.DB_HOST || 'postgres-svc',
+  port: process.env.DB_PORT || 5432,
+  database: process.env.DB_NAME || 'todo',
+  user: process.env.DB_USER || 'todo_user',
+  password: process.env.DB_PASSWORD || 'password',
+});
+
+async function connectToDB() {
+  try {
+    await client.connect();
+    console.log('Connected to PostgreSQL');
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS todos (
+        id VARCHAR(36) PRIMARY KEY,
+        text TEXT NOT NULL
+      );
+    `);
+    console.log('Table created or already exists');
+  } catch (err) {
+    console.error('Connection error', err.stack);
+  }
+}
 
 app.use(express.json());
 
@@ -13,20 +36,32 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/todos', (req, res) => {
-  res.json(todos);
+app.get('/todos', async (req, res) => {
+  try {
+    const result = await client.query('SELECT id, text FROM todos');
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
-app.post('/todos', (req, res) => {
+app.post('/todos', async (req, res) => {
   const { text } = req.body;
   if (!text) {
     return res.status(400).json({ error: 'Text is required' });
   }
-  const newTodo = { id: crypto.randomUUID(), text };
-  todos.push(newTodo);
-  res.status(201).json(newTodo);
+  try {
+    const id = crypto.randomUUID();
+    await client.query('INSERT INTO todos (id, text) VALUES ($1, $2)', [id, text]);
+    res.status(201).json({ id, text });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 app.listen(port, () => {
   console.log(`Todo backend server started on port ${port}`);
+  connectToDB();
 });

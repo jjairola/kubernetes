@@ -1,4 +1,11 @@
 
+## Ex 2.8 added
+
+- PostgreSQL StatefulSet
+- ConfigMaps
+- Secrets
+
+
 ## Ex 2.6 added
 
 - CACHE_DIR env

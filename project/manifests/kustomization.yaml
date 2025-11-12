@@ -8,3 +8,7 @@ resources:
 - ingress.yaml
 - middleware.yaml
 - pvc.yaml
+- statefulset-postgres.yaml
+- service-postgres.yaml
+- secret-postgres.yaml
+- configmap-postgres.yaml
