@@ -1,4 +1,8 @@
 
+## Ex 2.10 added
+
+- logging
+
 ## Ex 2.8 added
 
 - PostgreSQL StatefulSet

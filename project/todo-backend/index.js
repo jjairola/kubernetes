@@ -5,7 +5,7 @@ const app = express();
 
 const port = process.env.PORT || 3001;
 const client = new Client({
-  host: process.env.DB_HOST || 'postgres-svc',
+  host: process.env.DB_HOST || 'localhost',
   port: process.env.DB_PORT || 5432,
   database: process.env.DB_NAME || 'todo',
   user: process.env.DB_USER || 'todo_user',
@@ -32,7 +32,9 @@ app.use(express.json());
 
 app.use((req, res, next) => {
   const timestamp = new Date().toISOString();
-  console.log(`${timestamp} - ${req.method} ${req.url}`);
+  res.on('finish', () => {
+    console.log(`${timestamp} - ${req.method} ${req.url} - Status: ${res.statusCode}`);
+  });
   next();
 });
 
@@ -50,6 +52,9 @@ app.post('/todos', async (req, res) => {
   const { text } = req.body;
   if (!text) {
     return res.status(400).json({ error: 'Text is required' });
+  }
+  if (text.length > 140) {
+    return res.status(400).json({ error: 'Todo text must be 140 characters or less' });
   }
   try {
     const id = crypto.randomUUID();

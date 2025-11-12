@@ -13,6 +13,7 @@ Link: https://courses.mooc.fi/org/uh-cs/courses/devops-with-kubernetes]
 - [2.6.](https://github.com/jjairola/kubernetes/tree/2.6/project)
 - [2.7.](https://github.com/jjairola/kubernetes/tree/2.7/exercises)
 - [2.8.](https://github.com/jjairola/kubernetes/tree/2.8/project)
+- [2.9.](https://github.com/jjairola/kubernetes/tree/2.9/project)
 
 ### Chapter 2
 
