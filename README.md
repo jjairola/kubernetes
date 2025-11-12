@@ -18,3 +18,4 @@ Link: https://courses.mooc.fi/org/uh-cs/courses/devops-with-kubernetes]
 - [1.10.](https://github.com/jjairola/kubernetes/tree/1.10/event-more-services)
 - [1.11.](https://github.com/jjairola/kubernetes/tree/1.11/persisting-data)
 - [1.12.](https://github.com/jjairola/kubernetes/tree/1.12/project)
+- [1.13.](https://github.com/jjairola/kubernetes/tree/1.13/project)
