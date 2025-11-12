@@ -1,4 +1,11 @@
 
+## Ex 2.3
+
+- Added namepsace excersices
+
+```bash
+kubectl create namespace exercises
+```
 
 ## Ex 2.1
 
