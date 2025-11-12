@@ -1,7 +1,10 @@
 resources:
 - deployment-log-output.yaml
 - deployment-pingpong.yaml
+- deployment-webserver.yaml
 - service-log-output.yaml
 - service-pingpong.yaml
+- service-webserver.yaml
 - ingress.yaml
 - middleware.yaml
+- pvc.yaml

@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: log-output-dep
+  name: webserver-dep
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: log-output
+      app: webserver
   template:
     metadata:
       labels:
-        app: log-output
+        app: webserver
     spec:
       volumes:
         - name: cache-volume
           persistentVolumeClaim:
             claimName: image-cache-pvc
       containers:
-        - name: log-output
-          image: jjairola/log_output:latest
+        - name: webserver
+          image: jjairola/webserver:latest
           volumeMounts:
             - mountPath: /app/.cache
               name: cache-volume
