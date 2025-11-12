@@ -53,12 +53,40 @@ function getCurrentImage() {
 }
 
 app.get('/', (req, res) => {
+  const todos = [
+    'Learn DevOps with Kubernetes',
+    'Build a todo app',
+    'Deploy to production'
+  ];
+
+  const todoList = todos.map(todo => `<li>${todo}</li>`).join('');
+
   res.send(`
     <html>
       <body>
         <h1>The project App</h1>
         <img src="/image" alt="Random Image">
-        <p>DevOps with Kubernetes 2025
+
+        <div>
+          <input type="text" id="todoInput" maxlength="140">
+          <button onclick="addTodo()">Create Todo</button>
+        </div>
+
+        <ul>
+          ${todoList}
+        </ul>
+
+        <script>
+          function addTodo() {
+            const input = document.getElementById('todoInput');
+            if (input.value.trim() !== '') {
+              alert('Todo added: ' + input.value);
+              input.value = '';
+            }
+          }
+        </script>
+
+        <p>DevOps with Kubernetes 2025</p>
       </body>
     </html>
   `);
