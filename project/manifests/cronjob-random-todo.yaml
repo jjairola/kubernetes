@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: random-todo-generator
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: random-todo
+            image: curlimages/curl:latest
+            command: ["/bin/sh", "-c"]
+            args:
+            - |
+              RANDOM_URL=$(curl -s -I https://en.wikipedia.org/wiki/Special:Random | grep -i location | awk '{print $2}' | tr -d '\r')
+              TODO_TEXT="Read $RANDOM_URL"
+              curl -X POST http://todo-backend-svc:2348/todos -H "Content-Type: application/json" -d "{\"text\": \"$TODO_TEXT\"}"
+          restartPolicy: OnFailure
