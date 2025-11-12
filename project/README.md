@@ -1,4 +1,8 @@
 
+## Ex 2.6 added
+
+- CACHE_DIR env
+
 ## Ex 2.4 added
 
 - Added namepsace project

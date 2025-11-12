@@ -12,6 +12,9 @@ spec:
       labels:
         app: webserver
     spec:
+      env:
+        - name: CACHE_DIR
+          value: /app/.cache
       volumes:
         - name: cache-volume
           persistentVolumeClaim:

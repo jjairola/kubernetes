@@ -6,7 +6,7 @@ const path = require('path');
 // Settings
 const port = process.env.PORT || 3000;
 const todoBackendUrl = process.env.TODO_BACKEND_URL || 'http://localhost:3001';
-const cacheDir = path.join(__dirname, '.cache');
+const cacheDir = process.env.CACHE_DIR || path.join(__dirname, '.cache');
 const imageFile = path.join(cacheDir, 'current.jpg');
 const metadataFile = path.join(cacheDir, 'metadata.json');
 
