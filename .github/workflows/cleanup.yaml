@@ -1,0 +1,36 @@
+name: Cleanup Environment
+
+on:
+  delete
+
+env:
+  PROJECT_ID: study-da2c4
+  GKE_CLUSTER: dwk-cluster
+  GKE_ZONE: europe-north1-b
+  REGISTRY: europe-north1-docker.pkg.dev
+  REPOSITORY: gke
+  
+jobs:
+  cleanup:
+    name: Delete Environment
+    runs-on: ubuntu-latest
+    if: github.event.ref_type == 'branch' && github.event.ref != 'main'
+    steps:
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.DEPLOYER_SERVICE_ACCOUNT_KEY }}'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: 'Get GKE credentials'
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: '${{ env.GKE_CLUSTER }}'
+          project_id: '${{ env.PROJECT_ID }}'
+          location: '${{ env.GKE_ZONE }}'
+
+      - name: Delete namespace
+        run: |
+          NAMESPACE=$(echo "${{ github.event.ref }}" | tr '[:upper:]' '[:lower:]' | tr '/' '-')
+          kubectl delete namespace $NAMESPACE --ignore-not-found=true
