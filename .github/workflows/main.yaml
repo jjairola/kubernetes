@@ -71,7 +71,7 @@ jobs:
           location: '${{ env.GKE_ZONE }}'
 
       - name: Create namespace
-        run: kubectl create namespace project --dry-run=client -o yaml | kubectl apply -f -
+        run: kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Deploy manifests
         run: kubectl apply -k project/manifests
