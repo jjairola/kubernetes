@@ -4,6 +4,9 @@ Link: https://courses.mooc.fi/org/uh-cs/courses/devops-with-kubernetes]
 
 ## Exercises
 
+### Chapter 4
+- [3.1.](https://github.com/jjairola/kubernetes/tree/3.1/exercises)
+
 ### Chapter 3
 - [2.1.](https://github.com/jjairola/kubernetes/tree/2.1/connecting-pods)
 - [2.2.](https://github.com/jjairola/kubernetes/tree/2.2/project)
