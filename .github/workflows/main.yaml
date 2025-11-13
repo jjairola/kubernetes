@@ -1,7 +1,9 @@
 name: Deploy Project to GKE
 
 on:
-  push
+  push:
+    branches:
+      - main
 
 env:
   PROJECT_ID: study-da2c4
@@ -14,7 +16,8 @@ jobs:
   deploy:
     name: Build and Deploy to GKE
     runs-on: ubuntu-latest
-  steps:
+
+    steps:
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -43,13 +46,6 @@ jobs:
           docker push $IMAGE_TAG
           echo "WEBSERVER_IMAGE=$IMAGE_TAG" >> $GITHUB_ENV
 
-      - name: 'Get GKE credentials'
-        uses: 'google-github-actions/get-gke-credentials@v2'
-        with:
-          cluster_name: '${{ env.GKE_CLUSTER }}'
-          project_id: '${{ env.PROJECT_ID }}'
-          location: '${{ env.GKE_ZONE }}'
-
       - name: Set namespace
         run: |
           NAMESPACE=${{ github.ref_name }}
@@ -59,34 +55,25 @@ jobs:
           NAMESPACE=$(echo "$NAMESPACE" | tr '[:upper:]' '[:lower:]' | tr '/' '-')
           echo "NAMESPACE=$NAMESPACE" >> $GITHUB_ENV
 
-      - name: Build and push todo-backend
-        run: |
-          cd project/todo-backend
-          IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/todo-backend:$GITHUB_SHA
-          docker build -t $IMAGE_TAG .
-          docker push $IMAGE_TAG
-          echo "TODO_BACKEND_IMAGE=$IMAGE_TAG" >> $GITHUB_ENV
-
-      - name: Build and push webserver
-        run: |
-          cd project/webserver
-          IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/webserver:$GITHUB_SHA
-          docker build -t $IMAGE_TAG .
-          docker push $IMAGE_TAG
-          echo "WEBSERVER_IMAGE=$IMAGE_TAG" >> $GITHUB_ENV
-
-      - name: Update kustomization images and namespace
+      - name: Update kustomization images
         run: |
           cd project/manifests
           kustomize edit set image jjairola/todo-backend=$TODO_BACKEND_IMAGE
           kustomize edit set image jjairola/webserver=$WEBSERVER_IMAGE
           kustomize edit set namespace $NAMESPACE
 
+      - name: 'Get GKE credentials'
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: '${{ env.GKE_CLUSTER }}'
+          project_id: '${{ env.PROJECT_ID }}'
+          location: '${{ env.GKE_ZONE }}'
+
       - name: Create namespace
-        run: kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+        run: kubectl create namespace project --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Deploy manifests
-        run: kubectl apply -k project/manifests -n $NAMESPACE
+        run: kubectl apply -k project/manifests
 
       - name: Check status
-        run: kubectl get all -n $NAMESPACE
+        run: kubectl get all -n project
