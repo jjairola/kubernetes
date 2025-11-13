@@ -44,6 +44,23 @@ app.get("/", async (req, res) => {
   res.send(responseText);
 });
 
+app.get("/ready", async (req, res) => {
+  if (pingpong_url) {
+    try {
+      const response = await fetch(pingpong_url);
+      if (response.ok) {
+        res.status(200).send("Ready");
+      } else {
+        res.status(500).send("Not ready: pingpong not responding");
+      }
+    } catch (error) {
+      res.status(500).send("Not ready: cannot connect to pingpong");
+    }
+  } else {
+    res.status(500).send("Not ready: no pingpong URL");
+  }
+});
+
 function log(message = "") {
   const timestamp = new Date().toISOString();
   const logMessage = `${timestamp}: ${instance_id}: ${message}`;

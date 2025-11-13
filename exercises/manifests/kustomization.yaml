@@ -1,4 +1,4 @@
-namespace: default
+namespace: exercises
 
 resources:
   - configmap-log-output.yaml
@@ -6,7 +6,9 @@ resources:
   - deployment-pingpong.yaml
   - service-log-output.yaml
   - service-pingpong.yaml
-  - gateway.yaml
-  - httproute.yaml
+#  - gateway.yaml
+#  - httproute.yaml
+  - ingress.yaml
+  - middleware.yaml
   - statefulset-postgres.yaml
   - service-postgres.yaml

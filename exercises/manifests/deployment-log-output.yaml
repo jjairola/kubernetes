@@ -14,10 +14,10 @@ spec:
     spec:
       containers:
         - name: log-output
-          image: jjairola/log_output:latest
+          image: jjairola/log_output@sha256:73c2ed6dee46b33b3c1ce304325bd1f95ae7e0c183affbc7bc52bebf6a27ebd3
           env:
             - name: PINGPONG_URL
-              value: "http://pingpong-svc"
+              value: "http://pingpong-svc:2346"
             - name: MESSAGE
               valueFrom:
                 configMapKeyRef:
@@ -28,6 +28,12 @@ spec:
               mountPath: /app/config
           ports:
             - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
       volumes:
       # You set volumes at the Pod level, then mount them into containers inside that Pod
         - name: config-volume

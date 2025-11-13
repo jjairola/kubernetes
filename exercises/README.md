@@ -1,3 +1,7 @@
+## Ex 4.1
+
+- ReadinessProbe
+
 ## Ex 3.4
 
 - Add replacePrefixMatch

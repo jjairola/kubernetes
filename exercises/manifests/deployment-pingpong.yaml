@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: pingpong
-          image: jjairola/pingpong@sha256:c9ff12c8913e056518468b0c1bf2d3a5b4eeb86e44f80ab4ed2b7b30d6738f5b
+          image: jjairola/pingpong@sha256:d49e13fa707e68b5e9374a44def5fcb215aad73f32de967d5d14d4bef07eb97b
           ports:
             - containerPort: 3000
           env:
@@ -28,3 +28,9 @@ spec:
               value: "pingpong"
             - name: DB_PASSWORD
               value: "password"
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
