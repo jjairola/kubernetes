@@ -11,56 +11,9 @@ env:
   REPOSITORY: gke
 
 jobs:
-build-todo-backend:
-  name: Build Todo Backend
-  runs-on: ubuntu-latest
-  outputs:
-    image: ${{ steps.build.outputs.image }}
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - uses: google-github-actions/auth@v2
-      with:
-        credentials_json: '${{ secrets.DEPLOYER_SERVICE_ACCOUNT_KEY }}'
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
-    - run: gcloud --quiet auth configure-docker $REGISTRY
-    - name: Build and push
-      id: build
-      run: |
-        cd project/todo-backend
-        IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/todo-backend:$GITHUB_SHA
-        docker build -t $IMAGE_TAG .
-        docker push $IMAGE_TAG
-        echo "image=$IMAGE_TAG" >> $GITHUB_OUTPUT
-
-build-webserver:
-  name: Build Webserver
-  runs-on: ubuntu-latest
-  outputs:
-    image: ${{ steps.build.outputs.image }}
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - uses: google-github-actions/auth@v2
-      with:
-        credentials_json: '${{ secrets.DEPLOYER_SERVICE_ACCOUNT_KEY }}'
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
-    - run: gcloud --quiet auth configure-docker $REGISTRY
-    - name: Build and push
-      id: build
-      run: |
-        cd project/webserver
-        IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/webserver:$GITHUB_SHA
-        docker build -t $IMAGE_TAG .
-        docker push $IMAGE_TAG
-        echo "image=$IMAGE_TAG" >> $GITHUB_OUTPUT
-
-deploy:
-  name: Deploy to GKE
-  runs-on: ubuntu-latest
-  needs: [build-todo-backend, build-webserver]
+  deploy:
+    name: Build and Deploy to GKE
+    runs-on: ubuntu-latest
   steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -106,11 +59,27 @@ deploy:
           NAMESPACE=$(echo "$NAMESPACE" | tr '[:upper:]' '[:lower:]' | tr '/' '-')
           echo "NAMESPACE=$NAMESPACE" >> $GITHUB_ENV
 
+      - name: Build and push todo-backend
+        run: |
+          cd project/todo-backend
+          IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/todo-backend:$GITHUB_SHA
+          docker build -t $IMAGE_TAG .
+          docker push $IMAGE_TAG
+          echo "TODO_BACKEND_IMAGE=$IMAGE_TAG" >> $GITHUB_ENV
+
+      - name: Build and push webserver
+        run: |
+          cd project/webserver
+          IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/webserver:$GITHUB_SHA
+          docker build -t $IMAGE_TAG .
+          docker push $IMAGE_TAG
+          echo "WEBSERVER_IMAGE=$IMAGE_TAG" >> $GITHUB_ENV
+
       - name: Update kustomization images and namespace
         run: |
           cd project/manifests
-          kustomize edit set image jjairola/todo-backend=${{ needs.build-todo-backend.outputs.image }}
-          kustomize edit set image jjairola/webserver=${{ needs.build-webserver.outputs.image }}
+          kustomize edit set image jjairola/todo-backend=$TODO_BACKEND_IMAGE
+          kustomize edit set image jjairola/webserver=$WEBSERVER_IMAGE
           kustomize edit set namespace $NAMESPACE
 
       - name: Create namespace
