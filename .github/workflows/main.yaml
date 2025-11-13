@@ -53,9 +53,12 @@ jobs:
           NAMESPACE=$(echo "$NAMESPACE" | tr '[:upper:]' '[:lower:]' | tr '/' '-')
           echo "NAMESPACE=$NAMESPACE" >> $GITHUB_ENV
 
-      - name: Update kustomization images
+      - name: Update kustomization
         run: |
           cd project/manifests
+          if [ "$NAMESPACE" != "project" ]; then
+            kustomize edit remove resource cronjob-backup.yaml
+          fi
           kustomize edit set image jjairola/todo-backend=$TODO_BACKEND_IMAGE
           kustomize edit set image jjairola/webserver=$WEBSERVER_IMAGE
           kustomize edit set namespace $NAMESPACE

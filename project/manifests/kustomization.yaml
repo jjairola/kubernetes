@@ -12,3 +12,4 @@ resources:
 - secret-postgres.yaml
 - configmap-postgres.yaml
 - cronjob-random-todo.yaml
+- cronjob-backup.yaml

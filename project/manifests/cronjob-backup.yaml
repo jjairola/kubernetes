@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+spec:
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: backup-ksa
+          containers:
+          - name: backup
+            image: google/cloud-sdk:alpine
+            command: ["/bin/sh", "-c"]
+            args:
+            - |
+              apk add --no-cache postgresql
+              echo "Checking auth..."
+              gcloud auth list
+              TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+              BACKUP_FILE="postgres-backup-$TIMESTAMP.sql.gz"
+              echo "Backup"
+              pg_dump -h postgres-svc -U todo_user -d todo | gzip > /tmp/$BACKUP_FILE
+              echo "Copy backup"
+              gsutil cp /tmp/$BACKUP_FILE gs://dwk-cluster-backups/$BACKUP_FILE
+            env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+          restartPolicy: OnFailure

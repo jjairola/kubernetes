@@ -1,3 +1,34 @@
+## Ex 3.10
+
+Default GKE service account has read only access to buckets. Can only changed on cluster create.
+
+### Crate cluster work workload identity enabled
+```bash
+gcloud container clusters create dwk-cluster \
+--zone=europe-north1-b \
+--num-nodes=3  \
+--workload-pool=study-da2c4.svc.id.goog
+
+gcloud container clusters get-credentials dwk-cluster  --location europe-north1-b
+
+kubectl create namespace project
+
+kubectl create serviceaccount backup-ksa \
+    --namespace project
+
+gcloud projects add-iam-policy-binding projects/study-da2c4 \
+    --role=roles/storage.admin \
+    --member=principal://iam.googleapis.com/projects/117293324223/locations/global/workloadIdentityPools/study-da2c4.svc.id.goog/subject/ns/project/sa/backup-ksa \
+    --condition=None
+
+
+```
+
+Source:
+- https://www.youtube.com/watch?v=bPiQqPV4sxU
+– https://docs.cloud.google.com/kubernetes-engine/docs/how-to/workload-identity
+
+
 
 ## Ex 3.9 DBaaS vs DIY
 
