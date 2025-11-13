@@ -1,0 +1,69 @@
+name: Deploy Project to GKE
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: study-da2c4
+  GKE_CLUSTER: dwk-cluster
+  GKE_ZONE: europe-north1-b
+  REGISTRY: europe-north1-docker.pkg.dev
+  REPOSITORY: gke
+
+jobs:
+  deploy:
+    name: Build and Deploy to GKE
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.DEPLOYER_SERVICE_ACCOUNT_KEY }}'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - run: gcloud --quiet auth configure-docker $REGISTRY
+
+      - name: Build and push todo-backend
+        run: |
+          cd project/todo-backend
+          IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/todo-backend:$GITHUB_SHA
+          docker build -t $IMAGE_TAG .
+          docker push $IMAGE_TAG
+          echo "TODO_BACKEND_IMAGE=$IMAGE_TAG" >> $GITHUB_ENV
+
+      - name: Build and push webserver
+        run: |
+          cd project/webserver
+          IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/webserver:$GITHUB_SHA
+          docker build -t $IMAGE_TAG .
+          docker push $IMAGE_TAG
+          echo "WEBSERVER_IMAGE=$IMAGE_TAG" >> $GITHUB_ENV
+
+      - name: Update kustomization images
+        run: |
+          cd project/manifests
+          kustomize edit set image jjairola/todo-backend=$TODO_BACKEND_IMAGE
+          kustomize edit set image jjairola/webserver=$WEBSERVER_IMAGE
+
+      - name: 'Get GKE credentials'
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: '${{ env.GKE_CLUSTER }}'
+          project_id: '${{ env.PROJECT_ID }}'
+          location: '${{ env.GKE_ZONE }}'
+
+      - name: Create namespace
+        run: kubectl create namespace project --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy manifests
+        run: kubectl apply -k project/manifests
+
+      - name: Check status
+        run: kubectl get all -n project
