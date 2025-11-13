@@ -1,3 +1,8 @@
+
+## Ex 3.6
+
+- add github worklflows
+
 ## Ex 3.5
 
 - add builds for amd64
