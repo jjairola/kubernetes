@@ -1,3 +1,20 @@
+
+## Ex 3.9 DBaaS vs DIY
+
+| Category | DBaaS (e.g., Cloud SQL) | DIY (StatefulSet) |
+|----------|--------------------------|-------------------|
+| Initialization Work and Costs to initialize | |  |
+| - Pros |  Fast to setup. Enable from console, cli or Terraform. Private networking (VPC peering). HA out of the box. No configuration files needed.  | Full control. Integrates directly with Kubernetes.
+| - Cons | Cloud SQL very slow deployment time ~ 20min. | Manual config with manifests. Takes time to configure. |
+| Maintenance |  |  |
+| - Pros | Fully managed. Automatic updates and security patches, HA-failover. Integrates with GCP monitoring tools. | Customizable with custom extensions. Manual upgrades and security patches. |
+| - Cons | Limited to vendor version + extensions | Requires high maintenance for security, updates, backups. |
+| Backup Methods and their easy of usage |  |  |
+| - Pros | Automatic backup (enable just one click from ui) | Full customizable backups, eg CronJob. |
+| - Cons | Backups cost extra. Limited by backup features (daily) | Manual setup required. More time needed for mainiaining custom backup solution |
+
+
+
 ## Ex 3.7
 
 - create namespace for each branch
