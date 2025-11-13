@@ -28,5 +28,3 @@ spec:
               value: "pingpong"
             - name: DB_PASSWORD
               value: "password"
-            - name: PATH_PREFIX
-              value: "/pingpong"

@@ -17,7 +17,7 @@ spec:
           image: jjairola/log_output:latest
           env:
             - name: PINGPONG_URL
-              value: "http://pingpong-svc/pingpong"
+              value: "http://pingpong-svc"
             - name: MESSAGE
               valueFrom:
                 configMapKeyRef:
