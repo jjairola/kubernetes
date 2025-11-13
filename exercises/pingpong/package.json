@@ -12,6 +12,8 @@
   },
   "scripts": {
     "start": "node index.js",
-    "build": "docker build -t jjairola/pingpong:latest . && docker push jjairola/pingpong:latest"
+    "build": "docker build -t jjairola/pingpong:latest . && docker push jjairola/pingpong:latest",
+    "build-linux": "docker build --platform linux/amd64 -t jjairola/pingpong:latest . && docker push jjairola/pingpong:latest",
+    "buildx": "docker buildx build --platform linux/amd64,linux/arm64 -t jjairola/pingpong:latest --push ."
   }
 }

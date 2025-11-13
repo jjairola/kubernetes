@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: pingpong
-          image: jjairola/pingpong:latest
+          image: jjairola/pingpong@sha256:629696d67f116377b96f43d1553d1780bd4b4f7d70bc11a30681e9e79bcd5269
           ports:
             - containerPort: 3000
           env:
