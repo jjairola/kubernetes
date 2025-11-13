@@ -1,7 +1,11 @@
 
+## Ex 3.3
+
+- Change Ingress to Gateway API
+
 ## Ex 3.2 added
 
-- Change LoadBalancer to Ingressx
+- Change LoadBalancer to Ingress
 - Add PATH_PREFIX env for log_output
 
 ## Ex 3.1 added
