@@ -1,3 +1,6 @@
+## Ex 3.7
+
+- create namespace for each branch
 
 ## Ex 3.6
 
