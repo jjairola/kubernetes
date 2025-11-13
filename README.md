@@ -12,6 +12,7 @@ Link: https://courses.mooc.fi/org/uh-cs/courses/devops-with-kubernetes]
 - [3.5.](https://github.com/jjairola/kubernetes/tree/3.5/project)
 - [3.6.](https://github.com/jjairola/kubernetes/tree/3.6/project)
 - [3.7.](https://github.com/jjairola/kubernetes/tree/3.7/project)
+- [3.8.](https://github.com/jjairola/kubernetes/tree/3.8/.github/workflows)
 
 ### Chapter 3
 - [2.1.](https://github.com/jjairola/kubernetes/tree/2.1/connecting-pods)
