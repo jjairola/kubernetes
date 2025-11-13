@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: pingpong
-          image: jjairola/pingpong@sha256:629696d67f116377b96f43d1553d1780bd4b4f7d70bc11a30681e9e79bcd5269
+          image: jjairola/pingpong@sha256:c9ff12c8913e056518468b0c1bf2d3a5b4eeb86e44f80ab4ed2b7b30d6738f5b
           ports:
             - containerPort: 3000
           env:
@@ -28,3 +28,5 @@ spec:
               value: "pingpong"
             - name: DB_PASSWORD
               value: "password"
+            - name: PATH_PREFIX
+              value: "/pingpong"

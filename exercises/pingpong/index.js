@@ -1,9 +1,9 @@
-const fs = require('fs');
 const express = require('express');
 const { Client } = require('pg');
 const app = express();
 
 const port = process.env.PORT || 3000;
+const pathPrefix = process.env.PATH_PREFIX || '/';
 
 const databaseConfig = {
   host: process.env.DB_HOST || 'localhost',
@@ -39,12 +39,18 @@ async function initCounter() {
 
 initCounter();
 
-// Root endpoint
-app.get('/', async (req, res) => {
+if (pathPrefix !== '/') {
+  app.get('/', (req, res) => {
+    res.send('Hello World');
+  });
+}
+
+// Pingpong endpoint
+app.get(pathPrefix, async (req, res) => {
   try {
     counter += 1;
     await client.query('UPDATE counter SET value = $1 WHERE id = 1', [counter]);
-    res.send(`ping ${counter}`);
+    res.send(`${counter}`);
   } catch (err) {
     console.error('Error updating counter:', err);
     res.status(500).send('Error updating counter');

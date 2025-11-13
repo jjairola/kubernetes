@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: pingpong-svc
+  name: log-output-svc
 spec:
   type: ClusterIP
   selector:
-    app: pingpong
+    app: log-output
   ports:
     - port: 80
       protocol: TCP

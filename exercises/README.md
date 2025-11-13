@@ -1,4 +1,8 @@
 
+## Ex 3.2 added
+
+- Change LoadBalancer to Ingressx
+- Add PATH_PREFIX env for log_output
 
 ## Ex 3.1 added
 

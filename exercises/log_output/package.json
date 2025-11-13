@@ -8,7 +8,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "build": "docker build -t jjairola/log_output:latest . && docker push jjairola/log_output:latest"
+    "build": "docker build -t jjairola/log_output:latest . && docker push jjairola/log_output:latest",
+    "build-linux": "docker build --platform linux/amd64 -t jjairola/log_output:latest . && docker push jjairola/log_output:latest",
+    "buildx": "docker buildx build --platform linux/amd64,linux/arm64 -t jjairola/log_output:latest --push ."
   },
   "dependencies": {
     "express": "^4.18.0"
