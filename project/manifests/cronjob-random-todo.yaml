@@ -16,5 +16,5 @@ spec:
             - |
               RANDOM_URL=$(curl -s -I https://en.wikipedia.org/wiki/Special:Random | grep -i location | awk '{print $2}' | tr -d '\r')
               TODO_TEXT="Read $RANDOM_URL"
-              curl -X POST http://todo-backend-svc:2348/todos -H "Content-Type: application/json" -d "{\"text\": \"$TODO_TEXT\"}"
+              curl -X POST http://todo-backend-svc/todos -H "Content-Type: application/json" -d "{\"text\": \"$TODO_TEXT\"}"
           restartPolicy: OnFailure

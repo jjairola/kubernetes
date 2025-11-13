@@ -6,7 +6,6 @@ resources:
 - service-todo-backend.yaml
 - service-webserver.yaml
 - ingress.yaml
-- middleware.yaml
 - pvc.yaml
 - statefulset-postgres.yaml
 - service-postgres.yaml

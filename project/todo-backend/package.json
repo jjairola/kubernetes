@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "build": "docker build -t jjairola/todo-backend:latest . && docker push jjairola/todo-backend:latest"
+    "build": "docker build -t jjairola/todo-backend:latest . && docker push jjairola/todo-backend:latest",
+    "buildx": "docker buildx build --platform linux/amd64,linux/arm64 -t jjairola/todo-backend:latest --push ."
   },
   "dependencies": {
     "express": "^4.18.2",

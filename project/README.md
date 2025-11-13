@@ -1,3 +1,13 @@
+## Ex 3.5
+
+- add builds for amd64
+- update ports
+
+Notes:
+```bash
+kubectl create namespace project
+
+```
 
 ## Ex 2.10 added
 

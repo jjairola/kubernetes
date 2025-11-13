@@ -18,12 +18,14 @@ spec:
             claimName: image-cache-pvc
       containers:
         - name: webserver
-          image: jjairola/webserver:latest
+          image: jjairola/webserver@sha256:a253e69a2c68c61d2fa48db0440a6328c7181fd5ebb62c1fd4c6f892f87988b5
           env:
             - name: TODO_BACKEND_URL
-              value: http://todo-backend-svc:2348
+              value: http://todo-backend-svc
             - name: CACHE_DIR
               value: /app/.cache 
           volumeMounts:
             - mountPath: /app/.cache
               name: cache-volume
+          ports:
+            - containerPort: 3000
