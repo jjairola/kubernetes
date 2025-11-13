@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: todo-backend
-          image: jjairola/todo-backend@sha256:3c17ce266fa7dcd363aa48f846dc4677226adadd2d0d935e0fd010bf9699483b
+          image: jjairola/todo-backend@sha256:4f2eedff90e6670d11c2c6c527ae68c32dc3cab3667adb44f1fd779c91342384
           env:
             - name: DB_HOST
               value: "postgres-svc"
@@ -44,3 +44,12 @@ spec:
               memory: 256Mi
           ports:
             - containerPort: 3001
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3

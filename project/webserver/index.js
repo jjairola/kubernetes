@@ -18,6 +18,14 @@ if (!fs.existsSync(cacheDir)) {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use((req, res, next) => {
+  const timestamp = new Date().toISOString();
+  res.on('finish', () => {
+    console.log(`${timestamp} - ${req.method} ${req.url} - Status: ${res.statusCode}`);
+  });
+  next();
+});
+
 // Helper functions
 async function fetchTodos() {
   const response = await fetch(`${todoBackendUrl}/todos`);
@@ -120,6 +128,15 @@ app.get('/image', async (req, res) => {
   }
   res.setHeader('Content-Type', 'image/jpeg');
   res.send(image);
+});
+
+app.get('/health', async (req, res) => {
+  try {
+    await fetchTodos();
+    res.status(200).json({ status: 'healthy' });
+  } catch (err) {
+    res.status(503).json({ status: 'unhealthy', error: 'Backend unavailable' });
+  }
 });
 
 app.listen(port, () => {
