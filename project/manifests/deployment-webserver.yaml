@@ -23,9 +23,16 @@ spec:
             - name: TODO_BACKEND_URL
               value: http://todo-backend-svc
             - name: CACHE_DIR
-              value: /app/.cache 
+              value: /app/.cache
           volumeMounts:
             - mountPath: /app/.cache
               name: cache-volume
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
           ports:
             - containerPort: 3000

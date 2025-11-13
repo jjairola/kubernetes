@@ -1,3 +1,7 @@
+## Ex 3.11
+
+- resources and limits
+
 ## Ex 3.10
 
 Default GKE service account has read only access to buckets. Can only changed on cluster create.

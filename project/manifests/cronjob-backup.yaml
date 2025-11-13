@@ -31,3 +31,10 @@ spec:
                   name: postgres-secret
                   key: password
           restartPolicy: OnFailure
+          resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                cpu: 200m
+                memory: 128Mi
