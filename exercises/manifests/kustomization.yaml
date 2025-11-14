@@ -2,8 +2,10 @@ namespace: exercises
 
 resources:
   - configmap-log-output.yaml
-  - deployment-log-output.yaml
-  - deployment-pingpong.yaml
+#  - deployment-log-output.yaml
+  - rollout-log-output.yaml
+#  - deployment-pingpong.yaml
+  - rollout-pingpong.yaml
   - service-log-output.yaml
   - service-pingpong.yaml
 #  - gateway.yaml
@@ -12,3 +14,4 @@ resources:
   - middleware.yaml
   - statefulset-postgres.yaml
   - service-postgres.yaml
+  - cpu-usage.yaml

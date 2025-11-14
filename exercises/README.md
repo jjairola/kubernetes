@@ -1,3 +1,26 @@
+## Ex 4.4
+
+- AnalysisTemplate (cpu-usage)
+- Rollout (pingpong, log_output)
+
+Notes:
+```bash
+kubectl create namespace argo-rollouts
+kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+
+brew install argoproj/tap/kubectl-argo-rollouts
+
+kubectl argo rollouts get rollout log-output-rollout --watch
+kubectl argo rollouts get rollout pingpong-rollout --watch
+kubectl argo rollouts list rollouts --watch
+
+kubectl -n prometheus port-forward prometheus-kube-prometheus-stack-1762-prometheus-0 9090:9090 --insecure-skip-tls-verify
+
+kubectl argo rollouts dashboard
+
+
+```
+
 ## Ex 4.3
 
 ```bash

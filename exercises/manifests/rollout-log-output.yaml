@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: log-output-rollout
+  namespace: exercises
+spec:
+  replicas: 2
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: log-output
+  template:
+    metadata:
+      labels:
+        app: log-output
+    spec:
+      containers:
+        - name: log-output
+          image: jjairola/log_output@sha256:9271cef88c7be0db4084d4c138817163692b2fafb95abb9a71bfbeb6684cd961
+          env:
+            - name: PINGPONG_URL
+              value: "http://pingpong-svc:2346"
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: log-output-config
+                  key: MESSAGE
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+        - name: config-volume
+          configMap:
+            name: log-output-config
+  strategy:
+    canary:
+      steps:
+      - setWeight: 50
+      - analysis:
+          templates:
+          - templateName: cpu-usage
