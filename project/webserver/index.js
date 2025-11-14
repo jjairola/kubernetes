@@ -49,11 +49,29 @@ async function createTodo(text) {
   return await response.json();
 }
 
-async function fetchImage() {
-  const response = await fetch('https://picsum.photos/1200');
+async function markTodoDone(id) {
+  const response = await fetch(`${todoBackendUrl}/todos/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ done: true })
+  });
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
+  return await response.json();
+}
+
+async function fetchImage() {
+  let response;
+  try {
+    response = await fetch('https://picsum.photos/1200');
+  } catch (err) {
+    console.log((`HTTP error! status: ${response.status}`))
+    return
+  }
+  
   const buffer = await response.arrayBuffer();
   fs.writeFileSync(imageFile, Buffer.from(buffer));
   const metadata = { timestamp: Date.now() };
@@ -79,7 +97,9 @@ function getCurrentImage() {
 app.get('/', async (req, res) => {
   try {
     const todos = await fetchTodos();
-    const todoList = todos.map(todo => `<li>${todo.text}</li>`).join('');
+    console.log(todos);
+    const todoList = todos.filter(todo => !todo.done).map(todo => `<li>${todo.text} <form action="/todos/${todo.id}/done" method="POST" style="display:inline;"><button type="submit">Mark as done</button></form></li>`).join('');
+    const doneList = todos.filter(todo => todo.done).map(todo => `<li>${todo.text}</li>`).join('');
 
     res.send(`
       <html>
@@ -94,8 +114,13 @@ app.get('/', async (req, res) => {
             </div>
           </form>
 
+          <h2>Todo</h2>
           <ul>
             ${todoList}
+          </ul>
+          <h2>Done</h2>
+          <ul>
+            ${doneList}
           </ul>
 
           <p>DevOps with Kubernetes 2025 - dev</p>
@@ -107,7 +132,19 @@ app.get('/', async (req, res) => {
   }
 });
 
+app.post('/todos/:id/done', async (req, res) => {
+  console.log("/todos/:id/done");
+  const { id } = req.params;
+  try {
+    await markTodoDone(id);
+    res.redirect('/');
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to mark todo as done' });
+  }
+});
+
 app.post('/todos', async (req, res) => {
+  console.log("/todos");
   const { text } = req.body;
   if (!text) {
     return res.status(400).json({ error: 'Text is required' });
@@ -119,6 +156,7 @@ app.post('/todos', async (req, res) => {
     res.status(500).json({ error: 'Failed to create todo' });
   }
 });
+
 
 app.get('/image', async (req, res) => {
   let image = getCurrentImage();

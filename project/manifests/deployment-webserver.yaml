@@ -18,7 +18,7 @@ spec:
             claimName: image-cache-pvc
       containers:
         - name: webserver
-          image: jjairola/webserver@sha256:6f9d8023580178b96ec16c07678bd4da459f276047ff9b6929a4ea66a9ff6820
+          image: jjairola/webserver@sha256:bdcf9075a03f8acdbb7a02d0195aa04821d70af0db40abcaf21edebe11025a45
           env:
             - name: TODO_BACKEND_URL
               value: http://todo-backend-svc

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: todo-backend
-          image: jjairola/todo-backend@sha256:4f2eedff90e6670d11c2c6c527ae68c32dc3cab3667adb44f1fd779c91342384
+          image: jjairola/todo-backend@sha256:1f9d09de585dc2a2981301f5fb803062bdd0ff209b642ec94737f81e056001ef
           env:
             - name: DB_HOST
               value: "postgres-svc"

@@ -20,7 +20,8 @@ async function connectToDB(retries = 5, delay = 3000) {
       await client.query(`
         CREATE TABLE IF NOT EXISTS todos (
           id VARCHAR(36) PRIMARY KEY,
-          text TEXT NOT NULL
+          text TEXT NOT NULL,
+          done BOOLEAN DEFAULT FALSE
         );
       `);
       client.release();
@@ -56,7 +57,8 @@ app.get('/health', async (req, res) => {
 
 app.get('/todos', async (req, res) => {
   try {
-    const result = await pool.query('SELECT id, text FROM todos');
+    const result = await pool.query('SELECT id, text, done FROM todos');
+
     res.json(result.rows);
   } catch (err) {
     console.error(err);
@@ -74,8 +76,26 @@ app.post('/todos', async (req, res) => {
   }
   try {
     const id = crypto.randomUUID();
-    await pool.query('INSERT INTO todos (id, text) VALUES ($1, $2)', [id, text]);
-    res.status(201).json({ id, text });
+    await pool.query('INSERT INTO todos (id, text, done) VALUES ($1, $2, $3)', [id, text, false]);
+    res.status(201).json({ id, text, done: false });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.put('/todos/:id', async (req, res) => {
+  const { id } = req.params;
+  const { done } = req.body;
+  if (typeof done !== 'boolean') {
+    return res.status(400).json({ error: 'Done must be a boolean' });
+  }
+  try {
+    const result = await pool.query('UPDATE todos SET done = $1 WHERE id = $2 RETURNING id, text, done', [done, id]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+    res.json(result.rows[0]);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal server error' });
