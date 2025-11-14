@@ -1,3 +1,9 @@
+## Ex 4.3
+
+```bash
+sum(kube_pod_info{created_by_kind="StatefulSet", namespace="prometheus"})
+```
+
 ## Ex 4.1
 
 - ReadinessProbe
