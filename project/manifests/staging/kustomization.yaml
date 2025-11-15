@@ -2,9 +2,18 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ./../base
+- ./../base
 patches:
-  - path: deployment-broadcaster.yaml
-  - path: cronjob-backup.yaml
-
+- path: deployment-broadcaster.yaml
+- path: cronjob-backup.yaml
 namePrefix: prod-
+images:
+- name: jjairola/broadcaster
+  newName: jjairola/broadcaster
+  newTag: 604e2074af1351e29ff9404a0fe7391343edf94d
+- name: jjairola/todo-backend
+  newName: jjairola/todo-backend
+  newTag: 604e2074af1351e29ff9404a0fe7391343edf94d
+- name: jjairola/webserver
+  newName: jjairola/webserver
+  newTag: 604e2074af1351e29ff9404a0fe7391343edf94d
