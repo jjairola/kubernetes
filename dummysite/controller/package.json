@@ -1,0 +1,13 @@
+{
+  "name": "dummysite-controller",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "build": "docker build -t jjairola/dummysite:latest . && docker push jjairola/dummysite:latest"
+  },
+  "dependencies": {
+    "@kubernetes/client-node": "^0.20.0",
+    "axios": "^1.6.0"
+  }
+}
