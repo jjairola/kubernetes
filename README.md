@@ -4,6 +4,9 @@ Link: https://courses.mooc.fi/org/uh-cs/courses/devops-with-kubernetes]
 
 ## Exercises
 
+### Chapter 6
+- [5.1.](https://github.com/jjairola/kubernetes/tree/5.1/dummysite)
+
 ### Chapter 5
 - [4.1.](https://github.com/jjairola/kubernetes/tree/4.1/exercises)
 - [4.2.](https://github.com/jjairola/kubernetes/tree/4.2/project)
