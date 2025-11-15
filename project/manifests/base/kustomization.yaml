@@ -18,3 +18,13 @@ resources:
 - secret-slack.yaml
 - configmap-postgres.yaml
 - cronjob-random-todo.yaml
+images:
+- name: jjairola/broadcaster
+  newName: jjairola/broadcaster
+  newTag: 50b6b466f92265fd796f2b3dee3ad4411d6440ec
+- name: jjairola/todo-backend
+  newName: jjairola/todo-backend
+  newTag: 50b6b466f92265fd796f2b3dee3ad4411d6440ec
+- name: jjairola/webserver
+  newName: jjairola/webserver
+  newTag: 50b6b466f92265fd796f2b3dee3ad4411d6440ec
