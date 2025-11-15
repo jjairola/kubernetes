@@ -10,6 +10,8 @@ Link: https://courses.mooc.fi/org/uh-cs/courses/devops-with-kubernetes]
 - [4.3.](https://github.com/jjairola/kubernetes/tree/4.3/exercises)
 - [4.4.](https://github.com/jjairola/kubernetes/tree/4.4/exercises)
 - [4.5.](https://github.com/jjairola/kubernetes/tree/4.5/project)
+- [4.6.](https://github.com/jjairola/kubernetes/tree/4.6/project)
+- [4.7.](https://github.com/jjairola/kubernetes/tree/4.7/exercises)
 
 ### Chapter 4
 - [3.1.](https://github.com/jjairola/kubernetes/tree/3.1/exercises)
