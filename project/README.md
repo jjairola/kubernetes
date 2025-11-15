@@ -2,7 +2,7 @@
 ## Ex 4.8
 
 - workflows
-- test
+- test2
 
 ## Ex 4.6
 
