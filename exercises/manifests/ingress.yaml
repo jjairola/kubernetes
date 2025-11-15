@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: minimal-ingress
   annotations:
-    traefik.ingress.kubernetes.io/router.middlewares: default-stripprefix@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: exercises-stripprefix@kubernetescrd
 spec:
   rules:
   - http:

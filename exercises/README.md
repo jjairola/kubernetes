@@ -1,3 +1,17 @@
+## Ex 4.7
+
+```bash
+
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+kubectl port-forward -n argocd svc/argocd-server 8080:8080
+
+kubectl get -n argocd secrets argocd-initial-admin-secret -o yaml
+
+
+```
+
 ## Ex 4.4
 
 - AnalysisTemplate (cpu-usage)

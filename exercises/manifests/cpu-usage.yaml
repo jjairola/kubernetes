@@ -9,6 +9,6 @@ spec:
     successCondition: result < 1.0
     provider:
       prometheus:
-        address: http://kube-prometheus-stack-1762-prometheus.prometheus.svc.cluster.local:9090
+        address: http://kube-prometheus-stack-1763-prometheus.prometheus.svc.cluster.local:9090
         query: |
-          sum(rate(container_cpu_usage_seconds_total{namespace="exercises"}[5m]))
+          sum(rate(container_cpu_usage_seconds_total{namespace="exercises"}[5m])) or 0
