@@ -39,32 +39,6 @@ jobs:
           docker build --tag "jjairola/webserver:$GITHUB_SHA" project/webserver
           docker push "jjairola/webserver:$GITHUB_SHA"
 
-      - name: Set up Kustomize
-        uses: imranismail/setup-kustomize@v2
-
-      - name: Update kustomization images
-        run: |-
-          cd project/manifests/base
-          kustomize edit set image jjairola/broadcaster=jjairola/broadcaster:$GITHUB_SHA
-          kustomize edit set image jjairola/todo-backend=jjairola/todo-backend:$GITHUB_SHA
-          kustomize edit set image jjairola/webserver=jjairola/webserver:$GITHUB_SHA
-
-          cd ../staging
-          kustomize edit set image jjairola/broadcaster=jjairola/broadcaster:$GITHUB_SHA
-          kustomize edit set image jjairola/todo-backend=jjairola/todo-backend:$GITHUB_SHA
-          kustomize edit set image jjairola/webserver=jjairola/webserver:$GITHUB_SHA
-
-          cd ../prod
-          kustomize edit set image jjairola/broadcaster=jjairola/broadcaster:$GITHUB_SHA
-          kustomize edit set image jjairola/todo-backend=jjairola/todo-backend:$GITHUB_SHA
-          kustomize edit set image jjairola/webserver=jjairola/webserver:$GITHUB_SHA
-
-      - name: commit kustomization.yaml to GitHub
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: 'project/manifests/base/kustomization.yaml project/manifests/staging/kustomization.yaml project/manifests/prod/kustomization.yaml'
-          message: New version released ${{ github.sha }}
-
   deploy-staging:
     name: Deploy to Staging
     runs-on: ubuntu-latest
@@ -74,6 +48,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set up Kustomize
+        uses: imranismail/setup-kustomize@v2
+
+      - name: Update kustomization images
+        run: |-
+          cd project/manifests/prod
+          kustomize edit set image jjairola/broadcaster=jjairola/broadcaster:$GITHUB_SHA
+          kustomize edit set image jjairola/todo-backend=jjairola/todo-backend:$GITHUB_SHA
+          kustomize edit set image jjairola/webserver=jjairola/webserver:$GITHUB_SHA
 
       - name: Commit staging kustomization changes
         uses: EndBug/add-and-commit@v9
@@ -90,6 +74,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set up Kustomize
+        uses: imranismail/setup-kustomize@v2
+
+      - name: Update kustomization images
+        run: |-
+          cd ../prod
+          kustomize edit set image jjairola/broadcaster=jjairola/broadcaster:$GITHUB_SHA
+          kustomize edit set image jjairola/todo-backend=jjairola/todo-backend:$GITHUB_SHA
+          kustomize edit set image jjairola/webserver=jjairola/webserver:$GITHUB_SHA
 
       - name: Commit production kustomization changes
         uses: EndBug/add-and-commit@v9
