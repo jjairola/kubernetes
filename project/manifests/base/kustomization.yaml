@@ -1,0 +1,17 @@
+namespace: project
+
+resources:
+- deployment-todo-backend.yaml
+- deployment-webserver.yaml
+- deployment-broadcaster.yaml
+- service-todo-backend.yaml
+- service-webserver.yaml
+- service-broadcaster.yaml
+- ingress.yaml
+- pvc.yaml
+- statefulset-postgres.yaml
+- service-postgres.yaml
+- secret-postgres.yaml
+- secret-slack.yaml
+- configmap-postgres.yaml
+- cronjob-random-todo.yaml

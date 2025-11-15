@@ -1,0 +1,6 @@
+namespace: production
+
+bases:
+- ../base
+
+patchesStrategicMerge:
