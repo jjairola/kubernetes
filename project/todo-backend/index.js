@@ -1,9 +1,11 @@
 const express = require('express');
 const crypto = require('crypto');
 const { Pool } = require('pg');
+const { connect, StringCodec } = require('nats');
 const app = express();
 
 const port = process.env.PORT || 3001;
+const natsUrl = process.env.NATS_URL || 'nats://nats:4222';
 const pool = new Pool({
   host: process.env.DB_HOST || 'localhost',
   port: process.env.DB_PORT || 5432,
@@ -11,6 +13,9 @@ const pool = new Pool({
   user: process.env.DB_USER || 'todo_user',
   password: process.env.DB_PASSWORD || 'password',
 });
+
+let nc;
+const sc = StringCodec();
 
 async function connectToDB(retries = 5, delay = 3000) {
   for (let i = 1; i < retries + 1; i++) {
@@ -26,6 +31,16 @@ async function connectToDB(retries = 5, delay = 3000) {
       `);
       client.release();
       console.log('Table created or already exists');
+
+      // Connect to NATS
+      try {
+        nc = await connect({ servers: natsUrl });
+        console.log('Connected to NATS');
+      } catch (natsErr) {
+        console.error('Failed to connect to NATS:', natsErr.message);
+        // Continue without NATS - broadcaster service can handle missing messages
+      }
+
       return;
     } catch (err) {
       const breaker = delay * i;
@@ -77,6 +92,18 @@ app.post('/todos', async (req, res) => {
   try {
     const id = crypto.randomUUID();
     await pool.query('INSERT INTO todos (id, text, done) VALUES ($1, $2, $3)', [id, text, false]);
+
+    // Publish to NATS
+    if (nc) {
+      try {
+        const message = JSON.stringify({ id, text, done: false, action: 'create' });
+        nc.publish('todo.updates', sc.encode(message));
+        console.log('Published create message to NATS');
+      } catch (natsErr) {
+        console.error('Failed to publish to NATS:', natsErr.message);
+      }
+    }
+
     res.status(201).json({ id, text, done: false });
   } catch (err) {
     console.error(err);
@@ -95,7 +122,21 @@ app.put('/todos/:id', async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Todo not found' });
     }
-    res.json(result.rows[0]);
+
+    const updatedTodo = result.rows[0];
+
+    // Publish to NATS
+    if (nc) {
+      try {
+        const message = JSON.stringify({ ...updatedTodo, action: 'update' });
+        nc.publish('todo.updates', sc.encode(message));
+        console.log('Published update message to NATS');
+      } catch (natsErr) {
+        console.error('Failed to publish to NATS:', natsErr.message);
+      }
+    }
+
+    res.json(updatedTodo);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal server error' });

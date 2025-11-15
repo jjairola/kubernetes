@@ -1,3 +1,23 @@
+## Ex 4.6
+
+
+Requirements:
+* https://artifacthub.io/packages/helm/nats/nats
+* https://github.com/nats-nui/k8s
+
+```bash
+helm repo add nats https://nats-io.github.io/k8s/helm/charts/
+helm upgrade --install nats nats/nats --namespace project
+
+helm repo add nats-nui https://nats-nui.github.io/k8s/helm/charts
+helm install nats-nui nats-nui/nui --namespace project
+
+kubectl port-forward -n project svc/nats 4222:4222
+
+
+
+```
+
 ## Ex 4.5
 
 - mark as done
