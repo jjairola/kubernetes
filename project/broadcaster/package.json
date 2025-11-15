@@ -5,9 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start:dev": "nodemon index.js"
+    "start:dev": "nodemon index.js",
+    "build": "docker build -t jjairola/broadcaster:latest . && docker push jjairola/broadcaster:latest",
+    "buildx": "docker buildx build --platform linux/amd64,linux/arm64 -t jjairola/broadcaster:latest --push ."
   },
   "dependencies": {
+    "dotenv": "^17.2.3",
     "nats": "^2.28.2"
   },
   "devDependencies": {

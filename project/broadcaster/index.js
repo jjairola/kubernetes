@@ -1,19 +1,24 @@
 const { connect, StringCodec } = require('nats');
 const https = require('https');
+require('dotenv').config();
 
-const natsUrl = process.env.NATS_URL || 'nats://nats:4222';
+const natsUrl = process.env.NATS_URL || 'nats://localhost:4222';
 const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
 const port = process.env.PORT || 3002;
 
 if (!slackWebhookUrl) {
-  console.error('SLACK_WEBHOOK_URL environment variable is required');
-  process.exit(1);
+  console.log('SLACK_WEBHOOK_URL environment variable is required');
+  console.log('Slack integration will be disabled.');
+} else {
+  console.log(`Slack webhook URL is set to: ${slackWebhookUrl}`);
 }
 
 const sc = StringCodec();
 
 async function sendToSlack(message) {
-  return new Promise((resolve, reject) => {
+  if (!slackWebhookUrl) return;
+  
+    return new Promise((resolve, reject) => {
     const data = JSON.stringify({ text: message });
     const url = new URL(slackWebhookUrl);
 
@@ -58,7 +63,8 @@ async function main() {
 
     console.log('Connected to NATS. Subscribing to todo.updates...');
 
-    const sub = nc.subscribe('todo.updates');
+    // Use queue group to ensure each message is processed only once across replicas
+    const sub = nc.subscribe('todo.updates', { queue: 'broadcaster-queue' });
     (async () => {
       for await (const m of sub) {
         try {
@@ -67,16 +73,15 @@ async function main() {
 
           let message;
           if (data.action === 'create') {
-            message = `📝 New todo created: "${data.text}" (ID: ${data.id})`;
+            message = `New todo created: ${JSON.stringify(data)}`;
           } else if (data.action === 'update') {
-            message = `✅ Todo updated: "${data.text}" - Status: ${data.done ? 'Done' : 'Pending'} (ID: ${data.id})`;
+            message = `Todo updated: ${JSON.stringify(data)}`;
           } else {
             console.log('Unknown action:', data.action);
             continue;
           }
 
           await sendToSlack(message);
-          console.log('Message sent to Slack successfully');
         } catch (err) {
           console.error('Error processing message:', err);
         }

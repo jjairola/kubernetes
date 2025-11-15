@@ -1,8 +1,13 @@
 {
   "name": "kubernetes-project",
   "version": "1.0.0",
-  "workspaces": ["broadcaster", "todo-backend", "webserver"],
+  "workspaces": [
+    "broadcaster",
+    "todo-backend",
+    "webserver"
+  ],
   "devDependencies": {
-    "turbo": "^1.0.0"
-  }
+    "turbo": "^2.6.1"
+  },
+  "packageManager": "npm@11.6.2"
 }

@@ -14,8 +14,10 @@ spec:
     spec:
       containers:
         - name: todo-backend
-          image: jjairola/todo-backend@sha256:1f9d09de585dc2a2981301f5fb803062bdd0ff209b642ec94737f81e056001ef
+          image: jjairola/todo-backend@sha256:353850f2981fa9c6eaf328a464e79a7199aaa8e603c25e5cdc5afb675d94961e
           env:
+            - name: NATS_URL
+              value: "nats://nats:4222"
             - name: DB_HOST
               value: "postgres-svc"
             - name: DB_PORT

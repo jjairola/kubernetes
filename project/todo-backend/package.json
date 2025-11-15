@@ -7,7 +7,8 @@
     "start": "node index.js",
     "start:dev": "nodemon index.js",
     "build": "docker build -t jjairola/todo-backend:latest . && docker push jjairola/todo-backend:latest",
-    "buildx": "docker buildx build --platform linux/amd64,linux/arm64 -t jjairola/todo-backend:latest --push ."
+    "buildx": "docker buildx build --platform linux/amd64,linux/arm64 -t jjairola/todo-backend:latest --push .",
+    "test": "jest"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -16,5 +17,6 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.0"
+
   }
 }

@@ -1,7 +1,7 @@
 {
-  "name": "todo-app",
+  "name": "webserver",
   "version": "1.0.0",
-  "description": "Deploy with `kubectl apply -a manifests`",
+  "description": "Webserver service",
   "license": "ISC",
   "author": "",
   "type": "",

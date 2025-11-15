@@ -5,7 +5,7 @@ const { connect, StringCodec } = require('nats');
 const app = express();
 
 const port = process.env.PORT || 3001;
-const natsUrl = process.env.NATS_URL || 'nats://nats:4222';
+const natsUrl = process.env.NATS_URL || 'nats://localhost:4222';
 const pool = new Pool({
   host: process.env.DB_HOST || 'localhost',
   port: process.env.DB_PORT || 5432,

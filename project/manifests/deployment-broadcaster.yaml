@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: broadcaster-dep
 spec:
-  replicas: 1
+  replicas: 6
   selector:
     matchLabels:
       app: broadcaster
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: broadcaster
-          image: jjairola/broadcaster:latest
+          image: jjairola/broadcaster@sha256:6e4b4c7a65e7b9df7853598f77917a35e8443ad4153e314ea77cb55fe355d251
           env:
             - name: NATS_URL
               value: "nats://nats:4222"
