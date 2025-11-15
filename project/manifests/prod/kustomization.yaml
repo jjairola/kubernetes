@@ -7,10 +7,10 @@ namePrefix: prod-
 images:
 - name: jjairola/broadcaster
   newName: jjairola/broadcaster
-  newTag: 43fcf94642ef0f61d8688dc1c8c62d93a714ffea
+  newTag: 95fac6f0ba9df5fe09eef42c112ca85094ce8236
 - name: jjairola/todo-backend
   newName: jjairola/todo-backend
-  newTag: 43fcf94642ef0f61d8688dc1c8c62d93a714ffea
+  newTag: 95fac6f0ba9df5fe09eef42c112ca85094ce8236
 - name: jjairola/webserver
   newName: jjairola/webserver
-  newTag: 43fcf94642ef0f61d8688dc1c8c62d93a714ffea
+  newTag: 95fac6f0ba9df5fe09eef42c112ca85094ce8236
