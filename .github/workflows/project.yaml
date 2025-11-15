@@ -49,29 +49,37 @@ jobs:
           kustomize edit set image jjairola/todo-backend=jjairola/todo-backend:$GITHUB_SHA
           kustomize edit set image jjairola/webserver=jjairola/webserver:$GITHUB_SHA
 
+          cd ../staging
+          kustomize edit set image jjairola/broadcaster=jjairola/broadcaster:$GITHUB_SHA
+          kustomize edit set image jjairola/todo-backend=jjairola/todo-backend:$GITHUB_SHA
+          kustomize edit set image jjairola/webserver=jjairola/webserver:$GITHUB_SHA
+
+          cd ../prod
+          kustomize edit set image jjairola/broadcaster=jjairola/broadcaster:$GITHUB_SHA
+          kustomize edit set image jjairola/todo-backend=jjairola/todo-backend:$GITHUB_SHA
+          kustomize edit set image jjairola/webserver=jjairola/webserver:$GITHUB_SHA
+
       - name: commit kustomization.yaml to GitHub
         uses: EndBug/add-and-commit@v9
         with:
-          add: 'project/manifests/base/kustomization.yaml'
+          add: 'project/manifests/base/kustomization.yaml project/manifests/staging/kustomization.yaml project/manifests/prod/kustomization.yaml'
           message: New version released ${{ github.sha }}
 
   deploy-staging:
     name: Deploy to Staging
     runs-on: ubuntu-latest
     needs: build-publish
-    if: github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Kustomize
-        uses: imranismail/setup-kustomize@v2
-
-      - name: Deploy to staging
-        run: |
-          kubectl config set-context --current --namespace=staging
-          kustomize build project/manifests/staging | kubectl apply -f -
+      - name: Commit staging kustomization changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: 'project/manifests/staging/kustomization.yaml'
+          message: Update staging and prod kustomization with new images
 
   deploy-production:
     name: Deploy to Production
@@ -83,10 +91,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Kustomize
-        uses: imranismail/setup-kustomize@v2
-
-      - name: Deploy to production
-        run: |
-          kubectl config set-context --current --namespace=production
-          kustomize build project/manifests/prod | kubectl apply -f -
+      - name: Commit production kustomization changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: 'project/manifests/prod/kustomization.yaml'
+          message: Update prod kustomization with new images
