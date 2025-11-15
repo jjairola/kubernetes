@@ -54,7 +54,7 @@ jobs:
 
       - name: Update kustomization images
         run: |-
-          cd project/manifests/prod
+          cd project/manifests/staging
           kustomize edit set image jjairola/broadcaster=jjairola/broadcaster:$GITHUB_SHA
           kustomize edit set image jjairola/todo-backend=jjairola/todo-backend:$GITHUB_SHA
           kustomize edit set image jjairola/webserver=jjairola/webserver:$GITHUB_SHA
@@ -63,7 +63,7 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           add: 'project/manifests/staging/kustomization.yaml'
-          message: Update staging and prod kustomization with new images
+          message: New version released ${{ github.sha }}
 
   deploy-production:
     name: Deploy to Production
@@ -80,7 +80,7 @@ jobs:
 
       - name: Update kustomization images
         run: |-
-          cd ../prod
+          cd project/manifests/prod
           kustomize edit set image jjairola/broadcaster=jjairola/broadcaster:$GITHUB_SHA
           kustomize edit set image jjairola/todo-backend=jjairola/todo-backend:$GITHUB_SHA
           kustomize edit set image jjairola/webserver=jjairola/webserver:$GITHUB_SHA
@@ -89,4 +89,4 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           add: 'project/manifests/prod/kustomization.yaml'
-          message: Update prod kustomization with new images
+          message: New version released ${{ github.sha }}
