@@ -1,17 +1,26 @@
 namespace: exercises
 
-resources:
-  - configmap-log-output.yaml
 #  - deployment-log-output.yaml
-  - rollout-log-output.yaml
 #  - deployment-pingpong.yaml
-  - rollout-pingpong.yaml
-  - service-log-output.yaml
-  - service-pingpong.yaml
 #  - gateway.yaml
 #  - httproute.yaml
-  - ingress.yaml
-  - middleware.yaml
-  - statefulset-postgres.yaml
-  - service-postgres.yaml
-  - cpu-usage.yaml
+resources:
+- configmap-log-output.yaml
+- rollout-log-output.yaml
+- rollout-pingpong.yaml
+- service-log-output.yaml
+- service-pingpong.yaml
+- ingress.yaml
+- middleware.yaml
+- statefulset-postgres.yaml
+- service-postgres.yaml
+- cpu-usage.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: jjairola/log_output
+  newName: jjairola/log_output
+  newTag: 6229a9ccb84d3988d286c213b60c28310e775b1e
+- name: jjairola/pingpong
+  newName: jjairola/pingpong
+  newTag: 6229a9ccb84d3988d286c213b60c28310e775b1e
