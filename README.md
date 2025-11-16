@@ -7,6 +7,8 @@ Link: https://courses.mooc.fi/org/uh-cs/courses/devops-with-kubernetes]
 ### Chapter 6
 - [5.1.](https://github.com/jjairola/kubernetes/tree/5.1/dummysite)
 - [5.2.](https://github.com/jjairola/kubernetes/tree/5.2/istio)
+- [5.6.](https://github.com/jjairola/kubernetes/tree/5.6/knative)
+- [5.7.](https://github.com/jjairola/kubernetes/tree/5.7/knative)
 
 ### Chapter 5
 - [4.1.](https://github.com/jjairola/kubernetes/tree/4.1/exercises)
