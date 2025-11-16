@@ -1,3 +1,12 @@
+## Ex 5.7
+
+- Deploy pingpong with PostgreSQL to knative
+
+```bash
+kubectl apply -f postgresql-statefulset.yaml
+kubectl apply -f postgresql-service.yaml
+kubectl apply -f pingpong.yaml
+```
 
 ## Ex 5.6
 

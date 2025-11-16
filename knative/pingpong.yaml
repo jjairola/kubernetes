@@ -1,0 +1,29 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: pingpong
+spec:
+  template:
+    spec:
+      containers:
+      - name: pingpong
+        image: jjairola/pingpong@sha256:d49e13fa707e68b5e9374a44def5fcb215aad73f32de967d5d14d4bef07eb97b
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_HOST
+          value: "postgres-svc"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: "pingpong"
+        - name: DB_USER
+          value: "pingpong"
+        - name: DB_PASSWORD
+          value: "password"
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
